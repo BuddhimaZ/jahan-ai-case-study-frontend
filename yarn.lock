@@ -375,3 +375,8 @@ vite@^7.1.7:
     tinyglobby "^0.2.15"
   optionalDependencies:
     fsevents "~2.3.3"
+
+webix@^11.2.0:
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/webix/-/webix-11.2.0.tgz#caef81a64abfa3b4000392cb995c7a1a4935482a"
+  integrity sha512-l+qdvyCvUVJpXBKRTrR8TkaR2sSZmdGyj2E7CEMH6hnpkbScIHBeO4zbFfFb6ioH3/QBEhQ+NeUfenOZ9PJ8UQ==
