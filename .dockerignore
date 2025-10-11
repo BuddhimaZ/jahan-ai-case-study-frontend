@@ -1,0 +1,18 @@
+# Node / tool caches
+node_modules
+npm-debug.log*
+yarn-error.log*
+.pnpm-store
+
+# Build outputs (only copy dist from builder)
+dist
+
+# VCS
+.git
+.gitignore
+
+# OS/editor junk
+.DS_Store
+*.swp
+*.swo
+.vscode
