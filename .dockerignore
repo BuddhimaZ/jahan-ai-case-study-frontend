@@ -16,3 +16,7 @@ dist
 *.swp
 *.swo
 .vscode
+
+# Environment variables
+.env
+.env.*
