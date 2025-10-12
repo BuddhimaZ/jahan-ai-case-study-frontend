@@ -1,24 +1,35 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css";
+import * as webix from "webix";
+import { isAuthenticated, clearTokens } from "./api/http";
+import { loginView } from "./ui/login";
+import { preferencesView } from "./ui/preferences";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Buddhima Zoysa's Vite + TypeScript App</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+function mount(view: webix.ui.layout) {
+  const node = document.getElementById("app");
+  if (!node) throw new Error("#app not found");
+  node.innerHTML = ""; // clear
+  node.style.minHeight = "100vh";
+  node.style.display = "block";
+  view.config.container = node;
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+function showLogin() {
+  const view = loginView(showPreferences);
+  mount(view);
+}
+
+function showPreferences() {
+  const view = preferencesView();
+  mount(view);
+}
+
+webix.attachEvent("app:logout", () => {
+  clearTokens();
+  showLogin();
+});
+
+if (isAuthenticated()) {
+  showPreferences();
+} else {
+  showLogin();
+}
