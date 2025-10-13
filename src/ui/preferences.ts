@@ -19,7 +19,7 @@ function sectionHeader(title: string) {
 function successToast(text: string) { webix.message({ type: "success", text }); }
 function errorToast(text: string) { webix.message({ type: "error", text }); }
 
-export function preferencesView(): webix.ui.layout {
+export function preferencesView(container?: HTMLElement): webix.ui.layout {
     const accountFormId = "account_form";
     const notifFormId = "notif_form";
     const themeFormId = "theme_form";
@@ -96,12 +96,13 @@ export function preferencesView(): webix.ui.layout {
     };
 
     const notifForm: webix.ui.formConfig = {
-        view: "form", id: notifFormId, minWidth: 300, elementsConfig: { labelWidth: 220 },
+        view: "form", id: notifFormId, minWidth: 320, elementsConfig: { labelWidth: 220 },
         elements: [
             sectionHeader("Notification Settings"),
             { view: "switch", name: "email_notifications", label: "Email Notifications" },
             { view: "switch", name: "push_notifications", label: "Push Notifications" },
             { view: "richselect", name: "frequency", label: "Frequency", options: FREQUENCY.map(v => ({ id: v, value: v })) },
+            { height: 8 },
             {
                 view: "button", value: "Save", css: "webix_primary", click: async () => {
                     const form = webix.$$(notifFormId) as webix.ui.form;
@@ -122,23 +123,44 @@ export function preferencesView(): webix.ui.layout {
     };
 
     const themeForm: webix.ui.formConfig = {
-        view: "form", id: themeFormId, minWidth: 300, elementsConfig: { labelWidth: 220 },
+        view: "form", id: themeFormId, minWidth: 320, elementsConfig: { labelWidth: 220 },
         elements: [
             sectionHeader("Theme Settings"),
-            { view: "text", name: "primary_color", label: "Primary Color (#hex)" },
-            { view: "text", name: "secondary_color", label: "Secondary Color (#hex)" },
-            { view: "text", name: "font_primary_color", label: "Font Primary Color (#hex)" },
-            { view: "text", name: "font_secondary_color", label: "Font Secondary Color (#hex)" },
+            {
+                view: "colorpicker", name: "primary_color", label: "Primary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
+                    onChange: () => {
+                        const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);
+                    }
+                }
+            },
+            {
+                view: "colorpicker", name: "secondary_color", label: "Secondary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
+                    onChange: () => {
+                        const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);
+                    }
+                }
+            },
+            {
+                view: "colorpicker", name: "font_primary_color", label: "Font Primary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
+                    onChange: () => {
+                        const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);
+                    }
+                }
+            },
+            {
+                view: "colorpicker", name: "font_secondary_color", label: "Font Secondary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
+                    onChange: () => {
+                        const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);
+                    }
+                }
+            },
             { view: "text", name: "font_family", label: "Font Family" },
             { view: "segmented", name: "layout", label: "Layout", options: LAYOUTS.map(x => ({ id: x, value: x })) },
+            { height: 8 },
             {
                 view: "button", value: "Save", css: "webix_primary", click: async () => {
                     const form = webix.$$(themeFormId) as webix.ui.form;
                     const v = form.getValues();
-                    // basic hex validation
-                    const hex = /^#[0-9a-fA-F]{3,6}$/;
-                    const bad = ["primary_color", "secondary_color", "font_primary_color", "font_secondary_color"].filter(k => v[k] && !hex.test(v[k]));
-                    if (bad.length) { errorToast("Invalid color: " + bad.join(", ")); return; }
                     try {
                         webix.extend(form, webix.ProgressBar); (form as any).showProgress();
                         const updated = await updateTheme(v as Partial<ThemeSetting>);
@@ -152,11 +174,12 @@ export function preferencesView(): webix.ui.layout {
     };
 
     const privacyForm: webix.ui.formConfig = {
-        view: "form", id: privacyFormId, minWidth: 300, elementsConfig: { labelWidth: 220 },
+        view: "form", id: privacyFormId, minWidth: 320, elementsConfig: { labelWidth: 220 },
         elements: [
             sectionHeader("Privacy Settings"),
             { view: "richselect", name: "profile_visibility", label: "Profile Visibility", options: VISIBILITY.map(v => ({ id: v, value: v })) },
             { view: "switch", name: "data_sharing", label: "Data Sharing" },
+            { height: 8 },
             {
                 view: "button", value: "Save", css: "webix_primary", click: async () => {
                     const form = webix.$$(privacyFormId) as webix.ui.form;
@@ -172,20 +195,39 @@ export function preferencesView(): webix.ui.layout {
         ]
     };
 
+    // Centered collapsible group list (accordion), responsive width
+    // Centered collapsible group list (accordion), full-height with single vertical scroll
     const layout: webix.ui.layout = webix.ui({
+        container,
         rows: [
             {
-                view: "toolbar", elements: [
-                    { view: "label", label: "User Preferences" },
-                    {},
+                view: "toolbar", padding: { left: 8, right: 8 }, elements: [
+                    { view: "label", label: "User Preferences" }, {},
                     { view: "button", value: "Logout", width: 100, click: () => webix.callEvent("app:logout", []) }
                 ]
             },
             {
                 cols: [
-                    { rows: [accountForm, pwdForm] },
-                    { view: "resizer" },
-                    { rows: [notifForm, privacyForm, themeForm] }
+                    {},
+                    {
+                        maxWidth: 900, minWidth: 320, width: 800, rows: [
+                            {
+                                view: "scrollview", scroll: "y", body: {
+                                    rows: [
+                                        {
+                                            view: "accordion", multi: true, rows: [
+                                                { header: "Account Settings", body: { rows: [accountForm, pwdForm] } },
+                                                { header: "Notification Settings", body: notifForm },
+                                                { header: "Privacy Settings", body: privacyForm },
+                                                { header: "Theme Settings", body: themeForm },
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    {}
                 ]
             }
         ]

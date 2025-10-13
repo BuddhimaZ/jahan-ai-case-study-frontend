@@ -4,23 +4,27 @@ import { isAuthenticated, clearTokens } from "./api/http";
 import { loginView } from "./ui/login";
 import { preferencesView } from "./ui/preferences";
 
-function mount(view: webix.ui.layout) {
+let currentRoot: any = null;
+
+function getAppNode(): HTMLElement {
   const node = document.getElementById("app");
   if (!node) throw new Error("#app not found");
-  node.innerHTML = ""; // clear
+  node.innerHTML = ""; // clear previous markup
   node.style.minHeight = "100vh";
   node.style.display = "block";
-  view.config.container = node;
+  return node;
 }
 
 function showLogin() {
-  const view = loginView(showPreferences);
-  mount(view);
+  const node = getAppNode();
+  if (currentRoot && currentRoot.destructor) currentRoot.destructor();
+  currentRoot = loginView(showPreferences, node);
 }
 
 function showPreferences() {
-  const view = preferencesView();
-  mount(view);
+  const node = getAppNode();
+  if (currentRoot && currentRoot.destructor) currentRoot.destructor();
+  currentRoot = preferencesView(node);
 }
 
 webix.attachEvent("app:logout", () => {
