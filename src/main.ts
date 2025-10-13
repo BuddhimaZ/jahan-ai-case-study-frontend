@@ -1,8 +1,8 @@
 // import "./style.css";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import * as webix from "webix";
 import { isAuthenticated, clearTokens } from "./api/http";
 import { loginView } from "./ui/login";
-import { preferencesView } from "./ui/preferences";
 import layout from "./ui/layout";
 
 

@@ -1,8 +1,7 @@
 import * as webix from "webix";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 
 // Return a config object (not an instantiated view). The root webix.ui() call lives in layout.ts
-export default function globalToolbar(sidebar_id: string | null | undefined): any {
+export default function globalToolbar(sidebar_id: string | null | undefined): webix.ui.toolbarConfig {
     return {
         height: 40,
         view: "toolbar",
