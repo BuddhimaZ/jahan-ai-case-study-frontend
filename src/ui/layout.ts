@@ -19,12 +19,15 @@ export default function layout(): webix.ui.layout {
                 cols: [
                     sidebar(menu_data),
                     {
-                        view: "layout",
+                        view: "scrollview",
                         padding: 10,
                         responsive: true,
-                        cols: [
-                            preferencesView()
-                        ]
+                        scroll: "y", // vertical scrolling
+                        body: {
+                            cols: [
+                                preferencesView()
+                            ]
+                        }
                     }
                 ]
             }

@@ -176,6 +176,38 @@ function themeSettings(): webix.ui.accordionitemConfig {
     };
 }
 
+function passwordChangeSection(): webix.ui.accordionitemConfig {
+    return {
+        header: "Change Password",
+        collapsed: true,
+        body: {
+            view: "form",
+            elements: [
+                { view: "text", type: "password", label: "Current Password", name: "current_password" },
+                { view: "text", type: "password", label: "New Password", name: "new_password" },
+                { view: "text", type: "password", label: "Confirm New Password", name: "confirm_new_password" },
+                {
+                    view: "button",
+                    value: "Change Password",
+                    css: "webix_primary",
+                    align: "right",
+                    click: function (this: any) {
+                        const form = this.getFormView ? this.getFormView() : null;
+                        if (form) {
+                            const values = form.getValues();
+                            if (values.new_password !== values.confirm_new_password) {
+                                webix.message({ type: "error", text: "New passwords do not match" });
+                                return;
+                            }
+                            // TODO: Implement API call for changing password with values.current_password and values.new_password
+                            void values;
+                        }
+                    }
+                }
+            ]
+        }
+    };
+}
 
 
 
@@ -200,6 +232,7 @@ export default function preferencesView(): webix.ui.layoutConfig {
                 animate: true,
                 rows: [
                     accountSettings(),
+                    passwordChangeSection(),
                     notificationSettings(),
                     privacySettings(),
                     themeSettings(),
