@@ -1,19 +1,25 @@
-import "./style.css";
+// import "./style.css";
 import * as webix from "webix";
 import { isAuthenticated, clearTokens } from "./api/http";
 import { loginView } from "./ui/login";
 import { preferencesView } from "./ui/preferences";
+import layout from "./ui/layout";
 
 
 webix.attachEvent("app:logout", () => {
   clearTokens();
-  loginView(preferencesView);
+  loginView(layout);
 });
 
 webix.ready(() => {
   if (isAuthenticated()) {
-    preferencesView();
+    layout();
   } else {
-    loginView(preferencesView);
+    loginView(layout);
   }
+});
+
+webix.attachEvent("app:logout", () => {
+  clearTokens();
+  loginView(layout);
 });
