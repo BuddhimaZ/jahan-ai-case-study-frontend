@@ -2,11 +2,14 @@ import "webix/webix.css";
 import * as webix from "webix";
 import { login } from "../api/http";
 
+export const LOGIN_ROOT_ID = "login_root_layout";
+
 export function loginView(onSuccess: () => void): webix.ui.layout {
     const formId = "login_form";
     const messageId = "login_message";
     const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c] as string));
     const view = webix.ui({
+        id: LOGIN_ROOT_ID,
         rows: [
             {},
             {

@@ -3,6 +3,8 @@ import globalToolbar from "./components/global_toolbar";
 import sidebar, { SIDEBAR_ID } from "./components/sidebar";
 import preferencesView, { PREFERENCES_ID, loadPreferences } from "./views/preferences";
 
+export const APP_ROOT_ID = "app_root_layout";
+
 export default function layout(): webix.ui.layout {
 
     const menu_data = [
@@ -10,6 +12,7 @@ export default function layout(): webix.ui.layout {
     ];
 
     const layout = webix.ui<webix.ui.layout>({
+        id: APP_ROOT_ID,
         rows: [
             globalToolbar(SIDEBAR_ID),
             {
