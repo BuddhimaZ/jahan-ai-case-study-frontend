@@ -1,7 +1,7 @@
 import * as webix from "webix";
 import globalToolbar from "./components/global_toolbar";
 import sidebar, { SIDEBAR_ID } from "./components/sidebar";
-import preferencesView, { PREFERENCES_ID } from "./views/preferences";
+import preferencesView, { PREFERENCES_ID, loadPreferences } from "./views/preferences";
 
 export default function layout(): webix.ui.layout {
 
@@ -9,7 +9,7 @@ export default function layout(): webix.ui.layout {
         { id: PREFERENCES_ID, value: "Preferences", icon: "fas fa-cog" },
     ];
 
-    return webix.ui({
+    const layout = webix.ui<webix.ui.layout>({
         rows: [
             globalToolbar(SIDEBAR_ID),
             {
@@ -33,4 +33,11 @@ export default function layout(): webix.ui.layout {
             }
         ]
     });
+
+    // This is a slightly hacky way to apply the theme on initial load
+    // But currently since we only have one layout, it's fine
+    // and it works soo... -\_-(ツ)_/-
+    loadPreferences(layout);
+
+    return layout;
 }

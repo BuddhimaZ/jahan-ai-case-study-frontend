@@ -16,6 +16,8 @@ import {
     getTheme, updateTheme, changePassword
 } from "../../api/me";
 
+import { applyTheme } from "../../theme/applyTheme";
+
 const FREQUENCY: FrequencyEnum[] = ["immediate", "daily", "weekly"];
 const LAYOUTS: LayoutEnum[] = ["list", "cards"];
 const VISIBILITY: ProfileVisibilityEnum[] = ["public", "private"];
@@ -57,16 +59,6 @@ function accountSettings(): webix.ui.accordionitemConfig {
         body: {
             view: "form",
             id: ACCOUNT_SETTINGS_FORM_ID,
-            ready: function () {
-                if ((this as any)._initialLoaded) return;
-                (this as any)._initialLoaded = true;
-                const v = ensureProgress(webix.$$(ACCOUNT_SETTINGS_FORM_ID) as webix.ui.form);
-                v.showProgress({ type: "icon" });
-                getAccount()
-                    .then(data => (webix.$$(ACCOUNT_SETTINGS_FORM_ID) as webix.ui.form).setValues(data || {}))
-                    .catch(() => webix.message({ type: "error", text: "Failed to load account" }))
-                    .finally(() => v.hideProgress());
-            },
             elements: [
                 { view: "text", label: "Username", name: "username" },
                 { view: "text", label: "Email", name: "email" },
@@ -170,16 +162,6 @@ function notificationSettings(): webix.ui.accordionitemConfig {
         body: {
             view: "form",
             id: NOTIFICATION_SETTINGS_FORM_ID,
-            ready: function (this: webix.ui.form) {
-                if ((this as any)._initialLoaded) return;
-                (this as any)._initialLoaded = true;
-                const v = ensureProgress(this);
-                v.showProgress({ type: "icon" });
-                getNotifications()
-                    .then(data => this.setValues(data || {}))
-                    .catch(() => webix.message({ type: "error", text: "Failed to load notifications" }))
-                    .finally(() => v.hideProgress());
-            },
             elements: [
                 // Hidden field to hold the numeric user id
                 { view: "text", name: "user", hidden: true, type: "number" },
@@ -235,16 +217,6 @@ function privacySettings(): webix.ui.accordionitemConfig {
         body: {
             view: "form",
             id: PRIVACY_SETTINGS_ID,
-            ready: function (this: webix.ui.form) {
-                if ((this as any)._initialLoaded) return;
-                (this as any)._initialLoaded = true;
-                const v = ensureProgress(this);
-                v.showProgress({ type: "icon" });
-                getPrivacy()
-                    .then(data => this.setValues(data || {}))
-                    .catch(() => webix.message({ type: "error", text: "Failed to load privacy" }))
-                    .finally(() => v.hideProgress());
-            },
             elements: [
                 // Hidden field to hold the numeric user id
                 { view: "text", name: "user", hidden: true, type: "number" },
@@ -297,16 +269,6 @@ function themeSettings(): webix.ui.accordionitemConfig {
         body: {
             view: "form",
             id: THEME_SETTINGS_FORM_ID,
-            ready: function (this: webix.ui.form) {
-                if ((this as any)._initialLoaded) return;
-                (this as any)._initialLoaded = true;
-                const v = ensureProgress(this);
-                v.showProgress({ type: "icon" });
-                getTheme()
-                    .then(data => this.setValues(data || {}))
-                    .catch(() => webix.message({ type: "error", text: "Failed to load theme" }))
-                    .finally(() => v.hideProgress());
-            },
             elements: [
                 // Hidden field to hold the numeric user id
                 { view: "text", name: "user", hidden: true, type: "number" },
@@ -396,60 +358,6 @@ export default function preferencesView(): webix.ui.layoutConfig {
         id: PREFERENCES_ID,
         view: "layout",
         hidden: false,
-        on: {
-            onAfterRender: function (this: webix.ui.layout) {
-                // Fallback explicit loaders in case child ready hooks don't fire
-                webix.delay(() => {
-                    const acc = webix.$$(ACCOUNT_SETTINGS_FORM_ID) as webix.ui.form | undefined;
-                    if (acc && !(acc as any)._initialLoaded) {
-                        (acc as any)._initialLoaded = true;
-                        console.log("[Preferences] Loading account...");
-                        const v = ensureProgress(acc);
-                        v.showProgress({ type: "icon" });
-                        getAccount()
-                            .then(data => acc.setValues(data || {}))
-                            .catch(() => webix.message({ type: "error", text: "Failed to load account" }))
-                            .finally(() => v.hideProgress());
-                    }
-
-                    const notif = webix.$$(NOTIFICATION_SETTINGS_FORM_ID) as webix.ui.form | undefined;
-                    if (notif && !(notif as any)._initialLoaded) {
-                        (notif as any)._initialLoaded = true;
-                        console.log("[Preferences] Loading notifications...");
-                        const v = ensureProgress(notif);
-                        v.showProgress({ type: "icon" });
-                        getNotifications()
-                            .then(data => notif.setValues(data || {}))
-                            .catch(() => webix.message({ type: "error", text: "Failed to load notifications" }))
-                            .finally(() => v.hideProgress());
-                    }
-
-                    const priv = webix.$$(PRIVACY_SETTINGS_ID) as webix.ui.form | undefined;
-                    if (priv && !(priv as any)._initialLoaded) {
-                        (priv as any)._initialLoaded = true;
-                        console.log("[Preferences] Loading privacy...");
-                        const v = ensureProgress(priv);
-                        v.showProgress({ type: "icon" });
-                        getPrivacy()
-                            .then(data => priv.setValues(data || {}))
-                            .catch(() => webix.message({ type: "error", text: "Failed to load privacy" }))
-                            .finally(() => v.hideProgress());
-                    }
-
-                    const theme = webix.$$(THEME_SETTINGS_FORM_ID) as webix.ui.form | undefined;
-                    if (theme && !(theme as any)._initialLoaded) {
-                        (theme as any)._initialLoaded = true;
-                        console.log("[Preferences] Loading theme...");
-                        const v = ensureProgress(theme);
-                        v.showProgress({ type: "icon" });
-                        getTheme()
-                            .then(data => theme.setValues(data || {}))
-                            .catch(() => webix.message({ type: "error", text: "Failed to load theme" }))
-                            .finally(() => v.hideProgress());
-                    }
-                });
-            }
-        },
         rows: [
             {
                 view: "toolbar",
@@ -463,39 +371,6 @@ export default function preferencesView(): webix.ui.layoutConfig {
                 view: "accordion",
                 multi: true,
                 animate: true,
-                on: {
-                    onAfterOpen: function (this: any, id: string) {
-                        const item = webix.$$(id) as any;
-                        if (item && item.getBody) {
-                            const form = item.getBody() as webix.ui.form;
-                            if (form && !(form as any)._initialLoaded) {
-                                (form as any)._initialLoaded = true;
-                                const formId = (form.config as any).id as string;
-                                if (formId === ACCOUNT_SETTINGS_FORM_ID) {
-                                    console.log("[Preferences] Lazy load account on open");
-                                    const v = ensureProgress(form);
-                                    v.showProgress({ type: "icon" });
-                                    getAccount().then(d => form.setValues(d || {})).finally(() => v.hideProgress());
-                                } else if (formId === NOTIFICATION_SETTINGS_FORM_ID) {
-                                    console.log("[Preferences] Lazy load notifications on open");
-                                    const v = ensureProgress(form);
-                                    v.showProgress({ type: "icon" });
-                                    getNotifications().then(d => form.setValues(d || {})).finally(() => v.hideProgress());
-                                } else if (formId === PRIVACY_SETTINGS_ID) {
-                                    console.log("[Preferences] Lazy load privacy on open");
-                                    const v = ensureProgress(form);
-                                    v.showProgress({ type: "icon" });
-                                    getPrivacy().then(d => form.setValues(d || {})).finally(() => v.hideProgress());
-                                } else if (formId === THEME_SETTINGS_FORM_ID) {
-                                    console.log("[Preferences] Lazy load theme on open");
-                                    const v = ensureProgress(form);
-                                    v.showProgress({ type: "icon" });
-                                    getTheme().then(d => form.setValues(d || {})).finally(() => v.hideProgress());
-                                }
-                            }
-                        }
-                    }
-                },
                 rows: [
                     accountSettings(),
                     passwordChangeSection(),
@@ -507,4 +382,25 @@ export default function preferencesView(): webix.ui.layoutConfig {
             }
         ]
     };
+}
+
+export async function loadPreferences(view: webix.ui.baseview) {
+
+    const v = ensureProgress(view)
+    v.showProgress({ type: "icon" });
+    try {
+        const [acc, notif, priv, theme] = await Promise.all([
+            getAccount(), getNotifications(), getPrivacy(), getTheme()
+        ]);
+        (webix.$$(ACCOUNT_SETTINGS_FORM_ID) as webix.ui.form).setValues(acc);
+        (webix.$$(NOTIFICATION_SETTINGS_FORM_ID) as webix.ui.form).setValues(notif);
+        (webix.$$(PRIVACY_SETTINGS_ID) as webix.ui.form).setValues(priv);
+        (webix.$$(THEME_SETTINGS_FORM_ID) as webix.ui.form).setValues(theme);
+        applyTheme(theme);
+    } catch (e: any) {
+        console.error("Failed to load preferences:", e);
+    } finally {
+        v.hideProgress();
+    }
+
 }
