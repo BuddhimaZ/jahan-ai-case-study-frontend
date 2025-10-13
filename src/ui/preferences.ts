@@ -19,7 +19,7 @@ function sectionHeader(title: string) {
 function successToast(text: string) { webix.message({ type: "success", text }); }
 function errorToast(text: string) { webix.message({ type: "error", text }); }
 
-export function preferencesView(container?: HTMLElement): webix.ui.layout {
+export function preferencesView(): webix.ui.layout {
     const accountFormId = "account_form";
     const notifFormId = "notif_form";
     const themeFormId = "theme_form";
@@ -53,7 +53,11 @@ export function preferencesView(container?: HTMLElement): webix.ui.layout {
                         }
                     },
                     {},
-                    { view: "button", value: "Change Password", click: () => (webix.$$(pwdFormId) as any).show() }
+                    {
+                        view: "button", value: "Change Password", click: () => {
+                            (webix.$$(pwdFormId) as webix.ui.window).show();
+                        }
+                    }
                 ]
             }
         ],
@@ -212,19 +216,22 @@ export function preferencesView(container?: HTMLElement): webix.ui.layout {
     // Centered collapsible group list (accordion), responsive width
     // Centered collapsible group list (accordion), full-height with single vertical scroll
     const layout: webix.ui.layout = webix.ui({
-        container,
         rows: [
             {
-                view: "toolbar", padding: { left: 8, right: 8 }, elements: [
+                view: "toolbar",
+                padding: { left: 8, right: 8 },
+                elements: [
                     { view: "label", label: "User Preferences" }, {},
                     { view: "button", value: "Logout", width: 100, click: () => webix.callEvent("app:logout", []) }
                 ]
             },
             {
                 cols: [
-                    {},
                     {
-                        maxWidth: 900, minWidth: 320, width: 800, rows: [
+                        // maxWidth: 900,
+                        // minWidth: 320,
+                        // width: 800,
+                        rows: [
                             {
                                 view: "scrollview", scroll: "y", body: {
                                     rows: [
@@ -240,8 +247,7 @@ export function preferencesView(container?: HTMLElement): webix.ui.layout {
                                 }
                             }
                         ]
-                    },
-                    {}
+                    }
                 ]
             }
         ]
