@@ -1,5 +1,6 @@
 import * as webix from "webix";
 import globalToolbar from "./components/global_toolbar";
+import { getSkin } from "../theme/skin";
 import sidebar, { SIDEBAR_ID } from "./components/sidebar";
 import preferencesView, { PREFERENCES_ID, loadPreferences } from "./views/preferences";
 
@@ -13,6 +14,7 @@ export default function layout(): webix.ui.layout {
 
     const layout = webix.ui<webix.ui.layout>({
         id: APP_ROOT_ID,
+        css: getSkin(),
         rows: [
             globalToolbar(SIDEBAR_ID),
             {

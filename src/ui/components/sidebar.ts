@@ -1,5 +1,6 @@
 import * as webix from "webix";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { getSkin } from "../../theme/skin";
 
 export const SIDEBAR_ID = "sidebar1";
 
@@ -10,7 +11,7 @@ export default function sidebar(menu_data: any[]): any {
     return {
         view: "sidebar",
         id: SIDEBAR_ID,
-        css: "webix_dark",
+        css: getSkin(),
         width: 200,
         toggled: true,
         select: true,

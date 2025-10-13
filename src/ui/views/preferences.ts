@@ -17,6 +17,7 @@ import {
 } from "../../api/me";
 
 import { applyTheme } from "../../theme/applyTheme";
+import { getSkin } from "../../theme/skin";
 
 const FREQUENCY: FrequencyEnum[] = ["immediate", "daily", "weekly"];
 const LAYOUTS: LayoutEnum[] = ["list", "cards"];
@@ -68,7 +69,7 @@ function accountSettings(): webix.ui.accordionitemConfig {
                         {
                             view: "button",
                             value: "Save",
-                            css: "webix_primary",
+                            css: getSkin(),
                             align: "right",
                             width: 100,
                             click: function (this: any) {
@@ -118,7 +119,7 @@ function passwordChangeSection(): webix.ui.accordionitemConfig {
                         {
                             view: "button",
                             value: "Change Password",
-                            css: "webix_primary",
+                            css: getSkin(),
                             align: "right",
                             width: 100,
                             click: function (this: any) {
@@ -182,7 +183,7 @@ function notificationSettings(): webix.ui.accordionitemConfig {
                         {
                             view: "button",
                             value: "Save",
-                            css: "webix_primary",
+                            css: getSkin(),
                             align: "right",
                             width: 100,
                             click: function (this: any) {
@@ -234,7 +235,7 @@ function privacySettings(): webix.ui.accordionitemConfig {
                         {
                             view: "button",
                             value: "Save",
-                            css: "webix_primary",
+                            css: getSkin(),
                             align: "right",
                             width: 100,
                             click: function (this: any) {
@@ -308,7 +309,7 @@ function themeSettings(): webix.ui.accordionitemConfig {
                         {
                             view: "button",
                             value: "Save",
-                            css: "webix_primary",
+                            css: getSkin(),
                             align: "right",
                             width: 100,
                             click: function (this: any) {
@@ -361,7 +362,7 @@ export default function preferencesView(): webix.ui.layoutConfig {
         rows: [
             {
                 view: "toolbar",
-                css: "webix_primary",
+                css: getSkin(),
                 padding: 3,
                 elements: [
                     { view: "label", label: "Preferences", align: "left" }

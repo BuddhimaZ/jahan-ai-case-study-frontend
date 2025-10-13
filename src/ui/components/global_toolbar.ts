@@ -1,11 +1,12 @@
 import * as webix from "webix";
+import { getSkin, toggleSkin, applySkin, } from "../../theme/skin";
 
 // Return a config object (not an instantiated view). The root webix.ui() call lives in layout.ts
 export default function globalToolbar(sidebar_id: string | null | undefined): webix.ui.toolbarConfig {
     return {
         height: 40,
         view: "toolbar",
-        css: "webix_dark",
+        css: getSkin(),
         padding: 3,
         elements: [
             {
@@ -16,6 +17,19 @@ export default function globalToolbar(sidebar_id: string | null | undefined): we
             },
             { view: "label", label: "JahanAI", align: "left" },
             {},
+            {
+                view: "button",
+                css: "webix_transparent",
+                width: 140,
+                value: () => (getSkin() === "webix_dark" ? "Light theme" : "Dark theme"),
+                click: function (this: any) {
+                    const next = toggleSkin();
+                    // Re-apply CSS class to top-level regions (toolbar and sidebar)
+                    applySkin([this.getTopParentView()?.config.id, sidebar_id]);
+                    // Update own label
+                    if (this.setValue) this.setValue(next === "webix_dark" ? "Light theme" : "Dark theme");
+                }
+            },
             { view: "icon", icon: "fas fa-door-open", css: "toolbar-icon", width: 40, click: () => webix.callEvent("app:logout", []) }
         ]
     };
