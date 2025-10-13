@@ -2,19 +2,22 @@ import "webix/webix.css";
 import * as webix from "webix";
 import { login } from "../api/http";
 
-export function loginView(onSuccess: () => void, container?: HTMLElement): webix.ui.layout {
+export function loginView(onSuccess: () => void): webix.ui.layout {
     const formId = "login_form";
     const messageId = "login_message";
     const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c] as string));
     const view = webix.ui({
-        container,
         rows: [
+            {},
             {
                 cols: [
                     {},
                     {
-                        maxWidth: 520, minWidth: 300, width: 480, rows: [
-                            { template: "Sign in", type: "header", css: "webix_header primary" },
+                        maxWidth: 520,
+                        minWidth: 300,
+                        width: 480,
+                        rows: [
+                            { template: "Sign in", type: "header" },
                             {
                                 view: "form",
                                 id: formId,
@@ -23,7 +26,7 @@ export function loginView(onSuccess: () => void, container?: HTMLElement): webix
                                 elements: [
                                     { view: "text", name: "username", label: "Username", required: true, invalidMessage: "Required" },
                                     { view: "text", type: "password", name: "password", label: "Password", required: true, invalidMessage: "Required" },
-                                    { id: messageId, template: "", hidden: true, css: "webix_warning" },
+                                    { id: messageId, view: "template", label: "Error", template: "", hidden: true, css: "webix_warning" },
                                     {
                                         cols: [
                                             {
@@ -41,7 +44,7 @@ export function loginView(onSuccess: () => void, container?: HTMLElement): webix
                                                         const detail = e?.detail;
                                                         const msg = detail?.detail || "Invalid credentials";
                                                         (webix.$$(messageId) as any).show();
-                                                        (webix.$$(messageId) as any).setHTML(`<div style='padding:8px;color:#b00020'>${escapeHtml(String(msg))}</div>`);
+                                                        (webix.$$(messageId) as any).setHTML("<div style='padding:8px;color:#b00020'>" + escapeHtml(String(msg)) + "</div>");
                                                     } finally {
                                                         (form as any).hideProgress();
                                                     }
@@ -59,7 +62,8 @@ export function loginView(onSuccess: () => void, container?: HTMLElement): webix
                     },
                     {}
                 ]
-            }
+            },
+            {}
         ]
     }) as webix.ui.layout;
     return view;
