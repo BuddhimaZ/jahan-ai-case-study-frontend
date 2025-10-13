@@ -9,6 +9,13 @@ import type {
     ProfileVisibilityEnum
 } from "../../types";
 
+import {
+    getAccount, updateAccount,
+    getNotifications, updateNotifications,
+    getPrivacy, updatePrivacy,
+    getTheme, updateTheme, changePassword
+} from "../../api/me";
+
 const FREQUENCY: FrequencyEnum[] = ["immediate", "daily", "weekly"];
 const LAYOUTS: LayoutEnum[] = ["list", "cards"];
 const VISIBILITY: ProfileVisibilityEnum[] = ["public", "private"];
@@ -25,23 +32,69 @@ function accountSettings(): webix.ui.accordionitemConfig {
                 { view: "text", label: "Username", name: "username" },
                 { view: "text", label: "Email", name: "email" },
                 {
-                    view: "button",
-                    value: "Save",
-                    css: "webix_primary",
-                    align: "right",
-                    click: function (this: any) {
-                        const form = this.getFormView ? this.getFormView() : null;
-                        if (form) {
-                            const values = form.getValues() as Account;
-                            // TODO: submit values
-                            void values;
+                    cols: [
+                        {}, // Without this spacer the whole accordion item shrinks to fit the button, Don't ask me why
+                        {
+                            view: "button",
+                            value: "Save",
+                            css: "webix_primary",
+                            align: "right",
+                            width: 100,
+                            click: function (this: any) {
+                                const form = this.getFormView ? this.getFormView() : null;
+                                if (form) {
+                                    const values = form.getValues() as Account;
+                                    // TODO: submit values
+                                    void values;
+                                }
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         }
     };
 }
+
+function passwordChangeSection(): webix.ui.accordionitemConfig {
+    return {
+        header: "Change Password",
+        collapsed: true,
+        body: {
+            view: "form",
+            elements: [
+                { view: "text", type: "password", label: "Current Password", name: "current_password" },
+                { view: "text", type: "password", label: "New Password", name: "new_password" },
+                { view: "text", type: "password", label: "Confirm New Password", name: "confirm_new_password" },
+                {
+                    cols: [
+                        {},
+                        {
+                            view: "button",
+                            value: "Change Password",
+                            css: "webix_primary",
+                            align: "right",
+                            width: 100,
+                            click: function (this: any) {
+                                const form = this.getFormView ? this.getFormView() : null;
+                                if (form) {
+                                    const values = form.getValues();
+                                    if (values.new_password !== values.confirm_new_password) {
+                                        webix.message({ type: "error", text: "New passwords do not match" });
+                                        return;
+                                    }
+                                    // TODO: Implement API call for changing password with values.current_password and values.new_password
+                                    void values;
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    };
+}
+
 
 function notificationSettings(): webix.ui.accordionitemConfig {
     return {
@@ -63,18 +116,24 @@ function notificationSettings(): webix.ui.accordionitemConfig {
                     value: "immediate"
                 },
                 {
-                    view: "button",
-                    value: "Save",
-                    css: "webix_primary",
-                    align: "right",
-                    click: function (this: any) {
-                        const form = this.getFormView ? this.getFormView() : null;
-                        if (form) {
-                            const values = form.getValues() as NotificationSetting;
-                            // TODO: submit values
-                            void values;
+                    cols: [
+                        {},
+                        {
+                            view: "button",
+                            value: "Save",
+                            css: "webix_primary",
+                            align: "right",
+                            width: 100,
+                            click: function (this: any) {
+                                const form = this.getFormView ? this.getFormView() : null;
+                                if (form) {
+                                    const values = form.getValues() as NotificationSetting;
+                                    // TODO: submit values
+                                    void values;
+                                }
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         }
@@ -98,18 +157,24 @@ function privacySettings(): webix.ui.accordionitemConfig {
                 },
                 { view: "checkbox", label: "Data Sharing", name: "data_sharing", checkValue: true, uncheckValue: false, value: false },
                 {
-                    view: "button",
-                    value: "Save",
-                    css: "webix_primary",
-                    align: "right",
-                    click: function (this: any) {
-                        const form = this.getFormView ? this.getFormView() : null;
-                        if (form) {
-                            const values = form.getValues() as PrivacySetting;
-                            // TODO: submit values
-                            void values;
+                    cols: [
+                        {},
+                        {
+                            view: "button",
+                            value: "Save",
+                            css: "webix_primary",
+                            align: "right",
+                            width: 100,
+                            click: function (this: any) {
+                                const form = this.getFormView ? this.getFormView() : null;
+                                if (form) {
+                                    const values = form.getValues() as PrivacySetting;
+                                    // TODO: submit values
+                                    void values;
+                                }
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         }
@@ -155,56 +220,30 @@ function themeSettings(): webix.ui.accordionitemConfig {
                     value: "list"
                 },
                 {
-                    view: "button",
-                    value: "Save",
-                    css: "webix_primary",
-                    align: "right",
-                    click: function (this: any) {
-                        const form = this.getFormView ? this.getFormView() : null;
-                        if (form) {
-                            const values = form.getValues() as ThemeSetting;
-                            // TODO: submit values
-                            void values;
+                    cols: [
+                        {},
+                        {
+                            view: "button",
+                            value: "Save",
+                            css: "webix_primary",
+                            align: "right",
+                            width: 100,
+                            click: function (this: any) {
+                                const form = this.getFormView ? this.getFormView() : null;
+                                if (form) {
+                                    const values = form.getValues() as ThemeSetting;
+                                    // TODO: submit values
+                                    void values;
+                                }
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         }
     };
 }
 
-function passwordChangeSection(): webix.ui.accordionitemConfig {
-    return {
-        header: "Change Password",
-        collapsed: true,
-        body: {
-            view: "form",
-            elements: [
-                { view: "text", type: "password", label: "Current Password", name: "current_password" },
-                { view: "text", type: "password", label: "New Password", name: "new_password" },
-                { view: "text", type: "password", label: "Confirm New Password", name: "confirm_new_password" },
-                {
-                    view: "button",
-                    value: "Change Password",
-                    css: "webix_primary",
-                    align: "right",
-                    click: function (this: any) {
-                        const form = this.getFormView ? this.getFormView() : null;
-                        if (form) {
-                            const values = form.getValues();
-                            if (values.new_password !== values.confirm_new_password) {
-                                webix.message({ type: "error", text: "New passwords do not match" });
-                                return;
-                            }
-                            // TODO: Implement API call for changing password with values.current_password and values.new_password
-                            void values;
-                        }
-                    }
-                }
-            ]
-        }
-    };
-}
 
 
 

@@ -20,10 +20,10 @@ export default function layout(): webix.ui.layout {
                     sidebar(menu_data),
                     {
                         view: "scrollview",
-                        padding: 10,
                         responsive: true,
                         scroll: "y", // vertical scrolling
                         body: {
+                            padding: 20,
                             cols: [
                                 preferencesView()
                             ]
