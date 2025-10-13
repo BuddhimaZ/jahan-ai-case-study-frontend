@@ -1,6 +1,8 @@
 :root {
   --color-primary: #646cff;
   --color-secondary: #3178c6;
+  --background-primary-color: #ffffff;
+  --background-secondary-color: #f0f0f0;
   --font-primary-color: #213547;
   --font-secondary-color: #888888;
   --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -152,4 +154,150 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* ==============================
+   Webix theme variable overrides
+   ============================== */
+
+/* Base typography and backgrounds for Webix views */
+.webix_view,
+.webix_layout_space,
+.webix_scrollview .webix_scroll_cont,
+.webix_win_body,
+.webix_popup,
+.webix_el_tabbar,
+.webix_multiview,
+.webix_dtable .webix_ss_body {
+  background-color: var(--background-primary-color) !important;
+  color: var(--font-primary-color) !important;
+  font-family: var(--font-family) !important;
+}
+
+/* Headers, toolbars, tabbars */
+.webix_header, .webix_toolbar, .webix_tab_focused, .webix_tabbar .webix_item_tab.webix_selected {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+
+/* Secondary surfaces */
+.webix_accordionitem .webix_accordionitem_header,
+.webix_dtable .webix_ss_header, .webix_hcell,
+.webix_list .webix_list_item:hover,
+.webix_menu, .webix_popup .webix_list {
+  background-color: var(--background-secondary-color) !important;
+  color: var(--font-primary-color) !important;
+}
+
+/* Inputs */
+.webix_el_text .webix_inp,
+.webix_el_textarea .webix_inp,
+.webix_el_search .webix_inp,
+.webix_el_richselect .webix_inp,
+.webix_el_combo .webix_inp,
+.webix_el_colorpicker .webix_inp,
+.webix_el_datepicker .webix_inp {
+  background-color: var(--background-secondary-color) !important;
+  color: var(--font-primary-color) !important;
+  border-color: var(--color-secondary) !important;
+}
+.webix_el_text .webix_inp::placeholder,
+.webix_el_textarea .webix_inp::placeholder,
+.webix_el_search .webix_inp::placeholder {
+  color: var(--font-secondary-color) !important;
+}
+
+/* Buttons */
+.webix_el_button .webix_button {
+  background-color: var(--background-secondary-color) !important;
+  color: var(--font-primary-color) !important;
+}
+.webix_el_button .webix_button:hover {
+  border-color: var(--color-primary) !important;
+}
+/* Primary button already handled above */
+
+/* Lists, menus, selected states */
+.webix_list .webix_list_item,
+.webix_list .webix_list_item.webix_focused {
+  background-color: var(--background-primary-color) !important;
+  color: var(--font-primary-color) !important;
+}
+.webix_list .webix_selected,
+.webix_list .webix_list_item.webix_selected,
+.webix_menu .webix_selected {
+  background-color: var(--color-secondary) !important;
+  color: #ffffff !important;
+}
+
+/* Datatable cells and selection */
+.webix_dtable .webix_cell {
+  background-color: var(--background-primary-color) !important;
+  color: var(--font-primary-color) !important;
+}
+.webix_dtable .webix_row_select, .webix_dtable .webix_cell_select {
+  background-color: var(--color-secondary) !important;
+  color: #ffffff !important;
+}
+.webix_dtable .webix_ss_header, .webix_hcell {
+  background-color: var(--background-secondary-color) !important;
+  color: var(--font-primary-color) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+/* Windows and modals */
+.webix_window .webix_win_head {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+.webix_window .webix_win_body,
+.webix_modal_box {
+  background-color: var(--background-primary-color) !important;
+  color: var(--font-primary-color) !important;
+}
+
+/* Segmented, switch and focus accents already partly styled above */
+.webix_switch_box .webix_switch_on {
+  background-color: var(--color-primary) !important;
+}
+.webix_segmented .webix_selected, .webix_segment_1 .webix_selected {
+  background-color: var(--color-primary) !important;
+}
+
+/* Dark skin overrides (force variables to win even with dark skin) */
+.webix_dark .webix_view,
+.webix_dark .webix_layout_space,
+.webix_dark .webix_scrollview .webix_scroll_cont,
+.webix_dark .webix_win_body,
+.webix_dark .webix_popup,
+.webix_dark .webix_el_tabbar,
+.webix_dark .webix_multiview,
+.webix_dark .webix_dtable .webix_ss_body {
+  background-color: var(--background-primary-color) !important;
+  color: var(--font-primary-color) !important;
+  font-family: var(--font-family) !important;
+}
+.webix_dark .webix_header, .webix_dark .webix_toolbar {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+.webix_dark .webix_dtable .webix_cell {
+  background-color: var(--background-primary-color) !important;
+  color: var(--font-primary-color) !important;
+}
+.webix_dark .webix_dtable .webix_row_select, .webix_dark .webix_dtable .webix_cell_select,
+.webix_dark .webix_list .webix_selected {
+  background-color: var(--color-secondary) !important;
+  color: #ffffff !important;
+}
+.webix_dark .webix_el_text .webix_inp,
+.webix_dark .webix_el_textarea .webix_inp,
+.webix_dark .webix_el_search .webix_inp,
+.webix_dark .webix_el_richselect .webix_inp,
+.webix_dark .webix_el_combo .webix_inp,
+.webix_dark .webix_el_colorpicker .webix_inp,
+.webix_dark .webix_el_datepicker .webix_inp {
+  background-color: var(--background-secondary-color) !important;
+  color: var(--font-primary-color) !important;
+  border-color: var(--color-secondary) !important;
 }
