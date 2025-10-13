@@ -1,8 +1,9 @@
 import * as webix from "webix";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-export default function globalToolbar(sidebar_id: string | null | undefined): webix.ui.toolbar {
-    return webix.ui({
+// Return a config object (not an instantiated view). The root webix.ui() call lives in layout.ts
+export default function globalToolbar(sidebar_id: string | null | undefined): any {
+    return {
         height: 40,
         view: "toolbar",
         css: "webix_dark",
@@ -18,5 +19,5 @@ export default function globalToolbar(sidebar_id: string | null | undefined): we
             {},
             { view: "icon", icon: "fas fa-door-open", css: "toolbar-icon", width: 40, click: () => webix.callEvent("app:logout", []) }
         ]
-    });
+    };
 }

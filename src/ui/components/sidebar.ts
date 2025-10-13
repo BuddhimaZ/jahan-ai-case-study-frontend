@@ -3,21 +3,34 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const SIDEBAR_ID = "sidebar1";
 
-export default function sidebar(): webix.ui.sidebar {
-    return webix.ui({
+let selected_id: string | null = null;
+
+// Return a config object instead of instantiating the sidebar immediately
+export default function sidebar(menu_data: any[]): any {
+    return {
         view: "sidebar",
         id: SIDEBAR_ID,
         css: "webix_dark",
         width: 200,
         toggled: true,
-        data: [
-            { id: "preferences", value: "Preferences", icon: "fas fa-cog" },
-            { id: "about", value: "About", icon: "fas fa-info-circle" }
-        ],
+        select: true,
+        data: menu_data,
+        ready: function (this: webix.ui.sidebar) {
+            // Select the first item by default to ensure corresponding view is visible
+            const first = (this as any).getFirstId();
+            if (first) this.select(first);
+        },
         on: {
             onAfterSelect: function (id: string) {
-                webix.message("Selected: " + id);
+                if (selected_id === id) return;
+
+                if (selected_id !== null) {
+                    (webix.$$(selected_id) as webix.ui.view)?.hide();
+                }
+
+                (webix.$$(id) as webix.ui.view)?.show();
+                selected_id = id;
             }
         }
-    });
+    };
 }
