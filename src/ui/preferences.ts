@@ -141,6 +141,20 @@ export function preferencesView(container?: HTMLElement): webix.ui.layout {
                 }
             },
             {
+                view: "colorpicker", name: "background_primary_color", label: "Background Primary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
+                    onChange: () => {
+                        const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);
+                    }
+                }
+            },
+            {
+                view: "colorpicker", name: "background_secondary_color", label: "Background Secondary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
+                    onChange: () => {
+                        const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);
+                    }
+                }
+            },
+            {
                 view: "colorpicker", name: "font_primary_color", label: "Font Primary Color", stringResult: true, suggest: { type: "colorboard" }, on: {
                     onChange: () => {
                         const f = webix.$$(themeFormId) as webix.ui.form; applyTheme(f.getValues() as any);

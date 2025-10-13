@@ -24,6 +24,8 @@ export interface ThemeSetting {
     user: number;
     primary_color?: string; // #RRGGBB
     secondary_color?: string;
+    background_primary_color?: string;
+    background_secondary_color?: string;
     font_primary_color?: string;
     font_secondary_color?: string;
     font_family?: string;
