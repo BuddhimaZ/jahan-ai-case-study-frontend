@@ -3,8 +3,15 @@ import type {
     Account,
     NotificationSetting,
     PrivacySetting,
-    ThemeSetting
+    ThemeSetting,
+    FrequencyEnum,
+    LayoutEnum,
+    ProfileVisibilityEnum
 } from "../../types";
+
+const FREQUENCY: FrequencyEnum[] = ["immediate", "daily", "weekly"];
+const LAYOUTS: LayoutEnum[] = ["list", "cards"];
+const VISIBILITY: ProfileVisibilityEnum[] = ["public", "private"];
 
 export const PREFERENCES_ID = "preferences";
 
@@ -52,11 +59,7 @@ function notificationSettings(): webix.ui.accordionitemConfig {
                     view: "select",
                     label: "Frequency",
                     name: "frequency",
-                    options: [
-                        { id: "immediate", value: "Immediate" },
-                        { id: "daily", value: "Daily" },
-                        { id: "weekly", value: "Weekly" }
-                    ],
+                    options: FREQUENCY.map(freq => ({ id: freq, value: freq })),
                     value: "immediate"
                 },
                 {
@@ -90,10 +93,7 @@ function privacySettings(): webix.ui.accordionitemConfig {
                     view: "select",
                     label: "Profile Visibility",
                     name: "profile_visibility",
-                    options: [
-                        { id: "public", value: "Public" },
-                        { id: "private", value: "Private" }
-                    ],
+                    options: VISIBILITY.map(vis => ({ id: vis, value: vis })),
                     value: "public"
                 },
                 { view: "checkbox", label: "Data Sharing", name: "data_sharing", checkValue: true, uncheckValue: false, value: false },
@@ -151,10 +151,7 @@ function themeSettings(): webix.ui.accordionitemConfig {
                     view: "select",
                     label: "Layout",
                     name: "layout",
-                    options: [
-                        { id: "list", value: "List" },
-                        { id: "cards", value: "Cards" }
-                    ],
+                    options: LAYOUTS.map(layout => ({ id: layout, value: layout })),
                     value: "list"
                 },
                 {
