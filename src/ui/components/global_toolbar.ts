@@ -21,11 +21,12 @@ export default function globalToolbar(sidebar_id: string | null | undefined): we
                 view: "button",
                 css: "webix_transparent",
                 width: 140,
-                value: () => (getSkin() === "webix_dark" ? "Light theme" : "Dark theme"),
+                value: (getSkin() === "webix_dark" ? "Light theme" : "Dark theme"),
                 click: function (this: any) {
                     const next = toggleSkin();
-                    // Re-apply CSS class to top-level regions (toolbar and sidebar)
-                    applySkin([this.getTopParentView()?.config.id, sidebar_id]);
+                    // Re-apply CSS class recursively from the top parent (app root) and sidebar
+                    const rootId = this.getTopParentView()?.config.id as string | undefined;
+                    applySkin([rootId, sidebar_id]);
                     // Update own label
                     if (this.setValue) this.setValue(next === "webix_dark" ? "Light theme" : "Dark theme");
                 }

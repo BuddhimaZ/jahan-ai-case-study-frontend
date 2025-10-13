@@ -1,3 +1,5 @@
+import * as webix from "webix";
+
 export type SkinClass = "webix_primary" | "webix_dark";
 
 const STORAGE_KEY = "app:skin";
@@ -21,12 +23,46 @@ export function toggleSkin(): SkinClass {
 
 // Apply skin CSS class to a set of Webix view ids
 export function applySkin(ids: Array<string | undefined | null>): void {
+    // Also update document body class so descendant selectors (e.g., .webix_dark .webix_view) apply globally
+    try {
+        document.body.classList.remove("webix_dark", "webix_primary");
+        document.body.classList.add(getSkin());
+    } catch { /* ignore */ }
+
+    const targetSkin = getSkin();
+    const replaceCss = (css: any): any => {
+        if (typeof css === "string") {
+            return css
+                .replace(/\bwebix_dark\b/g, targetSkin)
+                .replace(/\bwebix_primary\b/g, targetSkin);
+        }
+        if (Array.isArray(css)) {
+            return css.map(x => replaceCss(x));
+        }
+        return css || targetSkin; // if null/undefined, apply skin
+    };
+
+    const visit = (view: any) => {
+        if (!view || !view.define) return;
+        const current = view.config?.css;
+        const nextCss = replaceCss(current);
+        view.define("css", nextCss);
+        // Update DOM class directly to ensure immediate effect
+        try {
+            if (view.$view && view.$view.classList) {
+                view.$view.classList.remove("webix_dark", "webix_primary");
+                view.$view.classList.add(targetSkin);
+            }
+        } catch { /* ignore */ }
+        if (view.refresh) { try { view.refresh(); } catch { /* ignore */ } }
+        if (view.resize) { try { view.resize(); } catch { /* ignore */ } }
+        const children = view.getChildViews ? view.getChildViews() : [];
+        if (children && children.length) children.forEach(visit);
+    };
+
     ids.forEach(id => {
         if (!id) return;
-        const v = (window as any).webix?.$$(id);
-        if (v && v.define) {
-            v.define("css", getSkin());
-            if (v.refresh) v.refresh();
-        }
+        const v = webix.$$(id) as any;
+        visit(v);
     });
 }

@@ -4,6 +4,7 @@ import * as webix from "webix";
 import { isAuthenticated, clearTokens } from "./api/http";
 import { loginView, LOGIN_ROOT_ID } from "./ui/login";
 import layout, { APP_ROOT_ID } from "./ui/layout";
+import { getSkin } from "./theme/skin";
 
 
 function clearUi() {
@@ -14,6 +15,11 @@ function clearUi() {
 }
 
 webix.ready(() => {
+  // Ensure body has the current skin class on boot
+  try {
+    document.body.classList.remove("webix_dark", "webix_primary");
+    document.body.classList.add(getSkin());
+  } catch { }
   clearUi();
   if (isAuthenticated()) {
     layout();
