@@ -18,17 +18,21 @@ export default function globalToolbar(sidebar_id: string | null | undefined): we
             { view: "label", label: "JahanAI", align: "left" },
             {},
             {
-                view: "button",
-                css: "webix_transparent",
-                width: 140,
-                value: (getSkin() === "webix_dark" ? "Light theme" : "Dark theme"),
+                view: "icon",
+                width: 40,
+                css: "toolbar-icon",
+                icon: (getSkin() === "webix_dark" ? "fas fa-sun" : "fas fa-moon"),
+                tooltip: (getSkin() === "webix_dark" ? "Switch to light" : "Switch to dark"),
                 click: function (this: any) {
                     const next = toggleSkin();
-                    // Re-apply CSS class recursively from the top parent (app root) and sidebar
                     const rootId = this.getTopParentView()?.config.id as string | undefined;
                     applySkin([rootId, sidebar_id]);
-                    // Update own label
-                    if (this.setValue) this.setValue(next === "webix_dark" ? "Light theme" : "Dark theme");
+                    // update icon
+                    if (this.define && this.refresh) {
+                        this.define("icon", next === "webix_dark" ? "fas fa-sun" : "fas fa-moon");
+                        this.define("tooltip", next === "webix_dark" ? "Switch to light" : "Switch to dark");
+                        this.refresh();
+                    }
                 }
             },
             { view: "icon", icon: "fas fa-door-open", css: "toolbar-icon", width: 40, click: () => webix.callEvent("app:logout", []) }
