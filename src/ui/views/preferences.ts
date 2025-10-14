@@ -32,6 +32,8 @@ const THEME_SETTINGS_FORM_ID = "theme_settings";
 const PASSWORD_CHANGE_FORM_ID = "password_change";
 
 
+const LABEL_WIDTH = 200;
+
 // --- simple frontend validation helpers ---
 function isEmail(email: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -61,8 +63,8 @@ function accountSettings(): webix.ui.accordionitemConfig {
             view: "form",
             id: ACCOUNT_SETTINGS_FORM_ID,
             elements: [
-                { view: "text", label: "Username", name: "username" },
-                { view: "text", label: "Email", name: "email" },
+                { view: "text", label: "Username", labelWidth: LABEL_WIDTH, name: "username" },
+                { view: "text", label: "Email", labelWidth: LABEL_WIDTH, name: "email" },
                 {
                     cols: [
                         {}, // Without this spacer the whole accordion item shrinks to fit the button, Don't ask me why
@@ -110,9 +112,9 @@ function passwordChangeSection(): webix.ui.accordionitemConfig {
             view: "form",
             id: PASSWORD_CHANGE_FORM_ID,
             elements: [
-                { view: "text", type: "password", label: "Current Password", name: "current_password" },
-                { view: "text", type: "password", label: "New Password", name: "new_password" },
-                { view: "text", type: "password", label: "Confirm New Password", name: "confirm_new_password" },
+                { view: "text", type: "password", label: "Current Password", labelWidth: LABEL_WIDTH, name: "current_password" },
+                { view: "text", type: "password", label: "New Password", labelWidth: LABEL_WIDTH, name: "new_password" },
+                { view: "text", type: "password", label: "Confirm New Password", labelWidth: LABEL_WIDTH, name: "confirm_new_password" },
                 {
                     cols: [
                         {},
@@ -121,7 +123,7 @@ function passwordChangeSection(): webix.ui.accordionitemConfig {
                             value: "Change Password",
                             css: getSkin(),
                             align: "right",
-                            width: 100,
+                            width: 200,
                             click: function (this: any) {
                                 const form = this.getFormView ? this.getFormView() : null;
                                 if (form) {
@@ -167,12 +169,13 @@ function notificationSettings(): webix.ui.accordionitemConfig {
                 // Hidden field to hold the numeric user id
                 { view: "text", name: "user", hidden: true, type: "number" },
                 // Booleans per NotificationSetting
-                { view: "checkbox", label: "Email Notifications", name: "email_notifications", checkValue: true, uncheckValue: false, value: true },
-                { view: "checkbox", label: "Push Notifications", name: "push_notifications", checkValue: true, uncheckValue: false, value: false },
+                { view: "checkbox", label: "Email Notifications", labelWidth: LABEL_WIDTH, name: "email_notifications", checkValue: true, uncheckValue: false, value: true },
+                { view: "checkbox", label: "Push Notifications", labelWidth: LABEL_WIDTH, name: "push_notifications", checkValue: true, uncheckValue: false, value: false },
                 // Frequency selector matching FrequencyEnum: "immediate" | "daily" | "weekly"
                 {
                     view: "select",
                     label: "Frequency",
+                    labelWidth: LABEL_WIDTH,
                     name: "frequency",
                     options: FREQUENCY.map(freq => ({ id: freq, value: freq })),
                     value: "immediate"
@@ -224,11 +227,12 @@ function privacySettings(): webix.ui.accordionitemConfig {
                 {
                     view: "select",
                     label: "Profile Visibility",
+                    labelWidth: LABEL_WIDTH,
                     name: "profile_visibility",
                     options: VISIBILITY.map(vis => ({ id: vis, value: vis })),
                     value: "public"
                 },
-                { view: "checkbox", label: "Data Sharing", name: "data_sharing", checkValue: true, uncheckValue: false, value: false },
+                { view: "checkbox", label: "Data Sharing", labelWidth: LABEL_WIDTH, name: "data_sharing", checkValue: true, uncheckValue: false, value: false },
                 {
                     cols: [
                         {},
@@ -274,16 +278,17 @@ function themeSettings(): webix.ui.accordionitemConfig {
                 // Hidden field to hold the numeric user id
                 { view: "text", name: "user", hidden: true, type: "number" },
                 // Color pickers for theme colors
-                { view: "colorpicker", label: "Primary Color", name: "primary_color", value: "#2F80ED" },
-                { view: "colorpicker", label: "Secondary Color", name: "secondary_color", value: "#56CCF2" },
-                { view: "colorpicker", label: "Background Primary", name: "background_primary_color", value: "#FFFFFF" },
-                { view: "colorpicker", label: "Background Secondary", name: "background_secondary_color", value: "#F4F6F8" },
-                { view: "colorpicker", label: "Font Primary", name: "font_primary_color", value: "#1F2937" },
-                { view: "colorpicker", label: "Font Secondary", name: "font_secondary_color", value: "#4B5563" },
+                { view: "colorpicker", label: "Primary Color", labelWidth: LABEL_WIDTH, name: "primary_color", value: "#2F80ED" },
+                { view: "colorpicker", label: "Secondary Color", labelWidth: LABEL_WIDTH, name: "secondary_color", value: "#56CCF2" },
+                { view: "colorpicker", label: "Background Primary", labelWidth: LABEL_WIDTH, name: "background_primary_color", value: "#FFFFFF" },
+                { view: "colorpicker", label: "Background Secondary", labelWidth: LABEL_WIDTH, name: "background_secondary_color", value: "#F4F6F8" },
+                { view: "colorpicker", label: "Font Primary", labelWidth: LABEL_WIDTH, name: "font_primary_color", value: "#1F2937" },
+                { view: "colorpicker", label: "Font Secondary", labelWidth: LABEL_WIDTH, name: "font_secondary_color", value: "#4B5563" },
                 // Font family select and layout select
                 {
                     view: "select",
                     label: "Font Family",
+                    labelWidth: LABEL_WIDTH,
                     name: "font_family",
                     options: [
                         { id: "Inter, sans-serif", value: "Inter" },
