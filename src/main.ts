@@ -1,5 +1,7 @@
-// import "./style.css";
+// Base CSS: load Webix styles and Font Awesome first, then our app overrides
+import "webix/webix.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+// import "./style.css";
 import * as webix from "webix";
 import { isAuthenticated, clearTokens } from "./api/http";
 import { loginView, LOGIN_ROOT_ID } from "./ui/login";

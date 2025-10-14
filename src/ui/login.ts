@@ -1,4 +1,3 @@
-import "webix/webix.css";
 import * as webix from "webix";
 import { login } from "../api/http";
 
